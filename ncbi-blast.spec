@@ -1,11 +1,11 @@
 Name:                ncbi-blast
 Version:             2.12.0
-Release:             1
+Release:             2
 Summary:             NCBI BLAST finds regions of similarity between biological sequences.
 License:             Public Domain
 URL:                 https://blast.ncbi.nlm.nih.gov/Blast.cgi
 Source0:             https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.12.0/ncbi-blast-2.12.0+-src.tar.gz
-BuildRequires:       lmdb lmdb-devel
+BuildRequires:       lmdb lmdb-devel gcc-c++ make
 %description
 The NCBI Basic Local Alignment Search Tool (BLAST) finds regions of
 local similarity between sequences. The program compares nucleotide or
@@ -43,5 +43,8 @@ cp c++/ReleaseMT/lib/* %{buildroot}%{_libdir}/ncbi-blast/
 %{_libdir}/ncbi-blast/*
 
 %changelog
+* Tue Feb 15 2022 herengui <herengui@uniontech.com> - 2.12.0-2
+- add missing buildrquires.
+
 * Wed Jul 28 2021 huanghaitao <huanghaitao8@huawei.com> - 2.12.0-1
 - package init
