@@ -1,0 +1,19 @@
+Author: misaka00251 <liuxin@iscas.ac.cn>
+Date:   Wed Sep 21 11:15:51 2022 +0800
+
+	Fix support for RISC-V.
+
+diff --git a/c++/src/build-system/config.guess b/c++/src/build-system/config.guess
+index f475ceb..57481db 100755
+--- a/c++/src/build-system/config.guess
++++ b/c++/src/build-system/config.guess
+@@ -979,6 +979,9 @@ EOF
+     ppc:Linux:*:*)
+ 	echo powerpc-unknown-linux-gnu
+ 	exit ;;
++	riscv32:Linux:*:* | riscv32be:Linux:*:* | riscv64:Linux:*:* | riscv64be:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
++	exit ;;
+     s390:Linux:*:* | s390x:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-ibm-linux
+ 	exit ;;
