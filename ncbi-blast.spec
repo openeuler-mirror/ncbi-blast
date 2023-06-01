@@ -1,6 +1,6 @@
 Name:                ncbi-blast
 Version:             2.12.0
-Release:             3
+Release:             4
 Summary:             NCBI BLAST finds regions of similarity between biological sequences.
 License:             Public Domain
 URL:                 https://blast.ncbi.nlm.nih.gov/Blast.cgi
@@ -19,6 +19,10 @@ members of gene families.
 
 %prep
 %autosetup -n %{name}-%{version}+-src -p1
+%ifarch loongarch64
+%_update_config_guess
+%_update_config_sub
+%endif
 
 %build
 cd c++
@@ -46,6 +50,9 @@ cp c++/ReleaseMT/lib/* %{buildroot}%{_libdir}/ncbi-blast/
 %{_libdir}/ncbi-blast/*
 
 %changelog
+* Wed May 31 2023 huajingyun <huajingyun@loongson.cn> - 2.12.0-4
+- update config.guess and config.sub for loongarch64
+
 * Thu Nov 24 2022 misaka00251 <liuxin@iscas.ac.cn> - 2.12.0-3
 - Add riscv support
 
