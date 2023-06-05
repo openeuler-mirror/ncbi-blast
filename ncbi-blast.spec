@@ -1,14 +1,15 @@
 Name:                ncbi-blast
-Version:             2.12.0
-Release:             4
+Version:             2.14.0
+Release:             1
 Summary:             NCBI BLAST finds regions of similarity between biological sequences.
 License:             Public Domain
 URL:                 https://blast.ncbi.nlm.nih.gov/Blast.cgi
-Source0:             https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.12.0/ncbi-blast-2.12.0+-src.tar.gz
+Source0:             https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-%{version}+-src.tar.gz
 %ifarch riscv64
 Patch0:              add-riscv-support.patch
 %endif
-BuildRequires:       lmdb lmdb-devel gcc-c++ make
+Requires:	     glibc perl python3  pcre elfutils-libelf zlib lmdbzstd lzo libuv libnghttp2 sqlite
+BuildRequires:       gcc-c++ make cpio zlib-devel  lmdb-devel
 %description
 The NCBI Basic Local Alignment Search Tool (BLAST) finds regions of
 local similarity between sequences. The program compares nucleotide or
@@ -29,27 +30,31 @@ cd c++
 export CFLAGS="%{build_cflags}"
 export CXXFLAGS="%{build_cxxflags}"
 export LDFLAGS="%{build_ldflags}"
-./configure
+./configure  --prefix=/usr --with-dll --with-mt
 cd ReleaseMT/build
 sed -i "s/-fPIC/-fPIC -g/g" Makefile.mk
 %make_build all_r
 
 %install
-install -d %{buildroot}%{_bindir}
-install -d %{buildroot}%{_includedir}/ncbi-blast
-install -d %{buildroot}%{_libdir}/ncbi-blast
-rm -rf c++/ReleaseMT/bin/windowmasker_2.2.22_adapter.py
-install -m 0755 c++/ReleaseMT/bin/* %{buildroot}%{_bindir}/
-cp -r c++/ReleaseMT/inc/* %{buildroot}%{_includedir}/ncbi-blast
-cp c++/ReleaseMT/lib/* %{buildroot}%{_libdir}/ncbi-blast/
+cd c++
+install -d -m 0755 %{buildroot}%{_bindir}
+install -d -m 0755 %{buildroot}%{_includedir}/ncbi-tools++
+install -d -m 0755 %{buildroot}%{_libdir}/
+rm -rf ReleaseMT/bin/windowmasker_2.2.22_adapter.py
+install -m 0755 ReleaseMT/bin/* %{buildroot}%{_bindir}/
+cp -r ReleaseMT/inc/* %{buildroot}%{_includedir}/ncbi-tools++
+cp -r ReleaseMT/lib/* %{buildroot}%{_libdir}/
 
 %files
 %defattr(-,root,root)
 %_bindir/*
-%{_includedir}/ncbi-blast/*
-%{_libdir}/ncbi-blast/*
+%{_includedir}/ncbi-tools++/*
+%{_libdir}/*
 
 %changelog
+* Fri Jul 2 2023 guoyizhang <kuoi@bioarchlinux.org> - 2.14.0-1
+- update to 2.14.0
+
 * Wed May 31 2023 huajingyun <huajingyun@loongson.cn> - 2.12.0-4
 - update config.guess and config.sub for loongarch64
 
